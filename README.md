@@ -48,7 +48,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/Sports18_1_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1742653340~acl=/*~hmac=4300d188d0b9b22ca845f113a62f2a612416c820d10a2d03a98f2e7328d67b6d;
+            var videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/Sports18_1_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1742653340~acl=/*~hmac=4300d188d0b9b22ca845f113a62f2a612416c820d10a2d03a98f2e7328d67b6d";
 
             if (Hls.isSupported()) {
                 var hls = new Hls();
