@@ -48,7 +48,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/Sports18_1_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1742747374~acl=/*~hmac=95a012999ef5ee39b4047125db76e805af0b253814f48a2de1e04c1b53255ca1";
+            var videoSrc = "https://mtsft.ruscfd.lat/720p.m3u8";
 
             if (Hls.isSupported()) {
                 var hls = new Hls();
