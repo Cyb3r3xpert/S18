@@ -48,7 +48,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://iframv2.embedxt.site/iframe/frame.php";
+            var videoSrc = "https://criccoder264.pages.dev/sky.m3u8";
 
             if (Hls.isSupported()) {
                 var hls = new Hls();
