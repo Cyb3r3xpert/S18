@@ -48,7 +48,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://mtsft.ruscfd.lat/720p.m3u8";
+            var videoSrc = "https://iframv2.embedxt.site/iframe/frame.php";
 
             if (Hls.isSupported()) {
                 var hls = new Hls();
