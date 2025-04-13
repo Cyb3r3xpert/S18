@@ -48,7 +48,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://criccoder264.pages.dev/sky.m3u8";
+            var videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/hdntl=exp=1744629512~acl=%2f*~data=hdntl~hmac=9cb4e01b761e283d216b7bfa7b9f1d7b147b55e642b41ff7afd51ef8bcd0c60c/StarSports_2_Hin_HD_voot_MOB-audio_108038_hin=108000-video=305200.m3u8";
 
             if (Hls.isSupported()) {
                 var hls = new Hls();
