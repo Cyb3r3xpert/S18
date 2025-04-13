@@ -28,6 +28,7 @@
         h1 {
             margin-bottom: 20px;
             color: #00ffff;
+            text-align: center;
         }
 
         video {
@@ -39,7 +40,7 @@
 
         .watermark {
             position: absolute;
-            bottom: 30px;
+            bottom: 70px; /* moved up to create space */
             right: 30px;
             background: rgba(0, 0, 0, 0.6);
             padding: 8px 12px;
@@ -49,7 +50,7 @@
         }
 
         .quality-selector {
-            margin-top: 15px;
+            margin-top: 40px; /* extra space below the video */
             text-align: center;
         }
 
@@ -67,15 +68,23 @@
             outline: none;
             box-shadow: 0 0 5px #00ffff;
         }
+
+        #loading {
+            color: gray;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Live Stream by Cyb3r 3xpert</h1>
-        <video id="videoPlayer" controls></video>
+        <div id="loading">Loading stream...</div>
+        <video id="videoPlayer" controls style="display: none;">
+            Your browser does not support HTML5 video.
+        </video>
         <div class="watermark">Made by Cyb3r 3xpert</div>
         <div class="quality-selector">
-            <label for="quality">Quality: </label>
+            <label for="quality" style="margin-right: 8px;">Quality:</label>
             <select id="quality"></select>
         </div>
     </div>
@@ -84,6 +93,8 @@
         document.addEventListener("DOMContentLoaded", function () {
             const video = document.getElementById("videoPlayer");
             const qualitySelect = document.getElementById("quality");
+            const loading = document.getElementById("loading");
+
             const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1744554380~acl=/*~hmac=767106268937b5909d91c04ef71f131f5a3d3d8481a1bee124f3d95c40eec012";
 
             if (Hls.isSupported()) {
@@ -94,28 +105,37 @@
                 hls.on(Hls.Events.MANIFEST_PARSED, function () {
                     const levels = hls.levels;
 
-                    // Add quality options to dropdown
                     levels.forEach((level, index) => {
-                        const height = level.height;
                         const option = document.createElement("option");
                         option.value = index;
-                        option.text = height + "p";
+                        option.text = level.height + "p";
                         qualitySelect.appendChild(option);
                     });
 
-                    // Auto-select best quality
                     qualitySelect.value = hls.currentLevel;
 
                     qualitySelect.addEventListener("change", function () {
                         hls.currentLevel = parseInt(this.value);
                     });
 
-                    video.play();
+                    video.play().catch(err => {
+                        console.warn("Autoplay blocked:", err);
+                    });
                 });
+
+                video.addEventListener("loadeddata", function () {
+                    loading.style.display = "none";
+                    video.style.display = "block";
+                });
+
             } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
                 video.src = videoSrc;
                 video.addEventListener("loadedmetadata", function () {
-                    video.play();
+                    loading.style.display = "none";
+                    video.style.display = "block";
+                    video.play().catch(err => {
+                        console.warn("Autoplay blocked:", err);
+                    });
                 });
             } else {
                 alert("Your browser does not support HLS playback.");
