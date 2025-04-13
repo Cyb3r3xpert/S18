@@ -1,40 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Live Stream | Cyb3r 3xpert</title>
     <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: white;
-            text-align: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0f0f0f;
+            color: #f5f5f5;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         .container {
-            max-width: 800px;
-            margin: auto;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
             position: relative;
+            box-sizing: border-box;
         }
+
+        h1 {
+            margin-bottom: 20px;
+            color: #00ffff;
+        }
+
         video {
             width: 100%;
-            max-width: 800px;
-            border: 2px solid white;
-            border-radius: 8px;
+            border: 2px solid #00ffff;
+            border-radius: 10px;
             background-color: black;
         }
+
         .watermark {
             position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 8px 15px;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 8px 12px;
             font-size: 14px;
+            border-radius: 4px;
+            color: #ffffff;
+        }
+
+        .quality-selector {
+            margin-top: 15px;
+            text-align: center;
+        }
+
+        select {
+            padding: 8px 12px;
+            background-color: #222;
+            color: #fff;
+            border: 1px solid #00ffff;
             border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            box-shadow: 0 0 5px #00ffff;
         }
     </style>
 </head>
@@ -43,18 +74,42 @@
         <h1>Live Stream by Cyb3r 3xpert</h1>
         <video id="videoPlayer" controls></video>
         <div class="watermark">Made by Cyb3r 3xpert</div>
+        <div class="quality-selector">
+            <label for="quality">Quality: </label>
+            <select id="quality"></select>
+        </div>
     </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            var video = document.getElementById("videoPlayer");
-            var videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/hdntl=exp=1744629512~acl=%2f*~data=hdntl~hmac=9cb4e01b761e283d216b7bfa7b9f1d7b147b55e642b41ff7afd51ef8bcd0c60c/StarSports_2_Hin_HD_voot_MOB-audio_108038_hin=108000-video=305200.m3u8";
+            const video = document.getElementById("videoPlayer");
+            const qualitySelect = document.getElementById("quality");
+            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/hdntl=exp=1744629512~acl=%2f*~data=hdntl~hmac=9cb4e01b761e283d216b7bfa7b9f1d7b147b55e642b41ff7afd51ef8bcd0c60c/StarSports_2_Hin_HD_voot_MOB-audio_108038_hin=108000-video=305200.m3u8";
 
             if (Hls.isSupported()) {
-                var hls = new Hls();
+                const hls = new Hls();
                 hls.loadSource(videoSrc);
                 hls.attachMedia(video);
+
                 hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    const levels = hls.levels;
+
+                    // Add quality options to dropdown
+                    levels.forEach((level, index) => {
+                        const height = level.height;
+                        const option = document.createElement("option");
+                        option.value = index;
+                        option.text = height + "p";
+                        qualitySelect.appendChild(option);
+                    });
+
+                    // Auto-select best quality
+                    qualitySelect.value = hls.currentLevel;
+
+                    qualitySelect.addEventListener("change", function () {
+                        hls.currentLevel = parseInt(this.value);
+                    });
+
                     video.play();
                 });
             } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
