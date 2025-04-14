@@ -95,7 +95,7 @@
             const qualitySelect = document.getElementById("quality");
             const loading = document.getElementById("loading");
 
-            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1744567451~acl=/*~hmac=49da3a7243a8ac224190ea27b3521c887374f0644bf31532b0af4f23be24c592";
+            const videoSrc = "https://redxt.ifrem.net/2index.m3u8";
 
             if (Hls.isSupported()) {
                 const hls = new Hls();
