@@ -94,7 +94,7 @@
             const qualitySelect = document.getElementById("quality");
             const loading = document.getElementById("loading");
 
-            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1745076813~acl=/*~hmac=36f4f27c8ecc68c2018b63629b68c70ec32b77e195bffb94054e205bd2fb5428";
+            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/hdntl=exp=1745226789~acl=%2f*~data=hdntl~hmac=2d3019046521933c1fc3563c006373e4ed51710573670acc440cc280f30af898/StarSports_2_Hin_HD_voot_MOB-audio_108038_hin=108000-video=1275600.m3u8";
 
             if (Hls.isSupported()) {
                 const hls = new Hls();
