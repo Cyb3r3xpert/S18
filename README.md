@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
@@ -15,7 +16,6 @@
             flex-direction: column;
             align-items: center;
         }
-
         .container {
             width: 100%;
             max-width: 900px;
@@ -23,23 +23,20 @@
             position: relative;
             box-sizing: border-box;
         }
-
         h1 {
             margin-bottom: 20px;
             color: #00ffff;
             text-align: center;
         }
-
         video {
             width: 100%;
             border: 2px solid #00ffff;
             border-radius: 10px;
             background-color: black;
         }
-
         .watermark {
             position: absolute;
-            bottom: 70px; /* moved up to create space */
+            bottom: 70px;
             right: 30px;
             background: rgba(0, 0, 0, 0.6);
             padding: 8px 12px;
@@ -47,12 +44,10 @@
             border-radius: 4px;
             color: #ffffff;
         }
-
         .quality-selector {
-            margin-top: 40px; /* extra space below the video */
+            margin-top: 40px;
             text-align: center;
         }
-
         select {
             padding: 8px 12px;
             background-color: #222;
@@ -62,15 +57,19 @@
             font-size: 16px;
             cursor: pointer;
         }
-
         select:focus {
             outline: none;
             box-shadow: 0 0 5px #00ffff;
         }
-
         #loading {
             color: gray;
             margin-top: 10px;
+        }
+        #viewerCount {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #00ff00;
+            text-align: center;
         }
     </style>
 </head>
@@ -81,6 +80,7 @@
         <video id="videoPlayer" controls style="display: none;">
             Your browser does not support HTML5 video.
         </video>
+        <div id="viewerCount">Loading viewers...</div>
         <div class="watermark">Made by Cyb3r 3xpert</div>
         <div class="quality-selector">
             <label for="quality" style="margin-right: 8px;">Quality:</label>
@@ -93,6 +93,7 @@
             const video = document.getElementById("videoPlayer");
             const qualitySelect = document.getElementById("quality");
             const loading = document.getElementById("loading");
+            const viewerCount = document.getElementById("viewerCount");
 
             const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1745759419~acl=/*~hmac=9c71f18dde9a19583b5da07c64070e66da81c41fb67e4f6b934ff37eb17f7485";
 
@@ -139,6 +140,22 @@
             } else {
                 alert("Your browser does not support HLS playback.");
             }
+
+            // --- Real viewer count fetching from PHP backend ---
+            function fetchViewers() {
+                fetch("viewer_counter.php")
+                    .then(response => response.json())
+                    .then(data => {
+                        viewerCount.innerText = data.viewers + " people watching";
+                    })
+                    .catch(err => {
+                        console.error("Error fetching viewers:", err);
+                        viewerCount.innerText = "Viewers: N/A";
+                    });
+            }
+
+            fetchViewers(); // Fetch once when loaded
+            setInterval(fetchViewers, 5000); // Fetch every 5 seconds
         });
     </script>
 </body>
