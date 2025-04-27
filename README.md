@@ -143,7 +143,7 @@
 
             // --- Real viewer count fetching from PHP backend ---
             function fetchViewers() {
-                fetch("http://taskplus.great-site.net/viewer_counter.php")
+                fetch("http://taskplus.great-site.net/app/viewer_counter.php")
                     .then(response => response.json())
                     .then(data => {
                         viewerCount.innerText = data.viewers + " people watching";
