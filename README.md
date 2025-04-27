@@ -95,7 +95,7 @@
             const loading = document.getElementById("loading");
             const viewerCount = document.getElementById("viewerCount");
 
-            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1745759419~acl=/*~hmac=9c71f18dde9a19583b5da07c64070e66da81c41fb67e4f6b934ff37eb17f7485";
+            const videoSrc = "https://starsporthindii.pages.dev/720p.m3u8";
 
             if (Hls.isSupported()) {
                 const hls = new Hls();
