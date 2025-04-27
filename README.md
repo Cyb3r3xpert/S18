@@ -95,7 +95,7 @@
             const loading = document.getElementById("loading");
             const viewerCount = document.getElementById("viewerCount");
 
-            const videoSrc = "https://starsporthindii.pages.dev/720p.m3u8";
+            const videoSrc = "https://crichd.onlinetvbd.com/stream.php?id=346&srv=1&format=.m3u8&vtoken=c1104580776c54ce8700d396b74f134725f6b6f06b6768a074d1231fe4cefaf3-1745771007";
 
             if (Hls.isSupported()) {
                 const hls = new Hls();
