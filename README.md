@@ -1,162 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Live Stream | Cyb3r 3xpert</title>
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f0f0f;
-            color: #f5f5f5;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 900px;
-            padding: 20px;
-            position: relative;
-            box-sizing: border-box;
-        }
-        h1 {
-            margin-bottom: 20px;
-            color: #00ffff;
-            text-align: center;
-        }
-        video {
-            width: 100%;
-            border: 2px solid #00ffff;
-            border-radius: 10px;
-            background-color: black;
-        }
-        .watermark {
-            position: absolute;
-            bottom: 70px;
-            right: 30px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 8px 12px;
-            font-size: 14px;
-            border-radius: 4px;
-            color: #ffffff;
-        }
-        .quality-selector {
-            margin-top: 40px;
-            text-align: center;
-        }
-        select {
-            padding: 8px 12px;
-            background-color: #222;
-            color: #fff;
-            border: 1px solid #00ffff;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        select:focus {
-            outline: none;
-            box-shadow: 0 0 5px #00ffff;
-        }
-        #loading {
-            color: gray;
-            margin-top: 10px;
-        }
-        #viewerCount {
-            margin-top: 15px;
-            font-size: 18px;
-            color: #00ff00;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>BTEUP Card Portal</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background: white;
+      padding: 40px 30px;
+      border-radius: 16px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      width: 100%;
+      max-width: 400px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      color: #333;
+    }
+
+    input[type="text"] {
+      padding: 12px;
+      width: 100%;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #0078d7;
+      box-shadow: 0 0 5px rgba(0, 120, 215, 0.5);
+    }
+
+    .options {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 16px;
+      color: #333;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: #0078d7;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .credit {
+      margin-top: 30px;
+      font-size: 14px;
+      color: #444;
+    }
+
+    .credit a {
+      color: #0078d7;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .credit a:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Live Stream by Cyb3r 3xpert</h1>
-        <div id="loading">Loading stream...</div>
-        <video id="videoPlayer" controls style="display: none;">
-            Your browser does not support HTML5 video.
-        </video>
-        <div id="viewerCount">Loading viewers...</div>
-        <div class="watermark">Made by Cyb3r 3xpert</div>
-        <div class="quality-selector">
-            <label for="quality" style="margin-right: 8px;">Quality:</label>
-            <select id="quality"></select>
-        </div>
+  <div class="container">
+    <h1>BTEUP Card Generator</h1>
+    <input type="text" id="enrollInput" placeholder="Enter your Enrollment Number">
+    
+    <div class="options">
+      <label><input type="radio" name="cardType" value="admit" checked> Admit Card</label>
+      <label><input type="radio" name="cardType" value="verify"> Verification Card</label>
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const video = document.getElementById("videoPlayer");
-            const qualitySelect = document.getElementById("quality");
-            const loading = document.getElementById("loading");
-            const viewerCount = document.getElementById("viewerCount");
+    <button onclick="redirectToCard()">Submit</button>
 
-            const videoSrc = "https://v18tataplaysyndication.akamaized.net/bpk-tv/StarSports_2_Hin_HD_voot_MOB/output03/index.m3u8?hdnea=exp=1745773819~acl=/*~hmac=a3945645188874b2a811e16fe9781e2941bb5159b9c24bc745128f585e8e469e";
+    <p class="credit">Website made by <strong>cyb3e 3xp3rt</strong> | Contact: <a href="https://t.me/slayer9646" target="_blank">@slayer9646</a></p>
+  </div>
 
-            if (Hls.isSupported()) {
-                const hls = new Hls();
-                hls.loadSource(videoSrc);
-                hls.attachMedia(video);
+  <script>
+    function redirectToCard() {
+      const enrollNumber = document.getElementById("enrollInput").value.trim();
+      const cardType = document.querySelector('input[name="cardType"]:checked').value;
 
-                hls.on(Hls.Events.MANIFEST_PARSED, function () {
-                    const levels = hls.levels;
+      if (!enrollNumber) {
+        alert("Please enter a valid enrollment number.");
+        return;
+      }
 
-                    levels.forEach((level, index) => {
-                        const option = document.createElement("option");
-                        option.value = index;
-                        option.text = level.height + "p";
-                        qualitySelect.appendChild(option);
-                    });
+      let baseUrl = "";
+      if (cardType === "admit") {
+        baseUrl = "https://bteup.ac.in/ESeva/Student/AdmitCard.aspx?EnrollNumber=";
+      } else if (cardType === "verify") {
+        baseUrl = "https://bteup.ac.in/ESeva/Student/VerificationCard.aspx?EnrollNumber=";
+      }
 
-                    qualitySelect.value = hls.currentLevel;
-
-                    qualitySelect.addEventListener("change", function () {
-                        hls.currentLevel = parseInt(this.value);
-                    });
-
-                    video.play().catch(err => {
-                        console.warn("Autoplay blocked:", err);
-                    });
-                });
-
-                video.addEventListener("loadeddata", function () {
-                    loading.style.display = "none";
-                    video.style.display = "block";
-                });
-
-            } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-                video.src = videoSrc;
-                video.addEventListener("loadedmetadata", function () {
-                    loading.style.display = "none";
-                    video.style.display = "block";
-                    video.play().catch(err => {
-                        console.warn("Autoplay blocked:", err);
-                    });
-                });
-            } else {
-                alert("Your browser does not support HLS playback.");
-            }
-
-            // --- Real viewer count fetching from PHP backend ---
-            function fetchViewers() {
-                fetch("http://taskplus.great-site.net/app/viewer_counter.php")
-                    .then(response => response.json())
-                    .then(data => {
-                        viewerCount.innerText = data.viewers + " people watching";
-                    })
-                    .catch(err => {
-                        console.error("Error fetching viewers:", err);
-                        viewerCount.innerText = "Viewers: N/A";
-                    });
-            }
-
-            fetchViewers(); // Fetch once when loaded
-            setInterval(fetchViewers, 5000); // Fetch every 5 seconds
-        });
-    </script>
+      const fullUrl = baseUrl + encodeURIComponent(enrollNumber);
+      window.location.href = fullUrl; // Redirects in same tab (no link shown)
+    }
+  </script>
 </body>
 </html>
