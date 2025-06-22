@@ -2,135 +2,98 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>BTEUP Card Portal</title>
+  <title>Live TV Player - TEN3HD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     body {
+      background-color: #121212;
+      color: #f1f1f1;
+      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #74ebd5, #acb6e5);
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      height: 100vh;
+      padding: 20px;
     }
-
-    .container {
-      background: white;
-      padding: 40px 30px;
-      border-radius: 16px;
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-      text-align: center;
-      width: 100%;
-      max-width: 400px;
-      animation: fadeIn 0.8s ease-in-out;
-    }
-
     h1 {
-      margin-bottom: 20px;
-      font-size: 24px;
-      color: #333;
+      color: #00e676;
     }
-
-    input[type="text"] {
-      padding: 12px;
+    video {
       width: 100%;
-      margin-bottom: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      transition: border 0.3s, box-shadow 0.3s;
+      max-width: 800px;
+      height: auto;
+      background-color: black;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #00e67633;
     }
-
-    input:focus {
-      outline: none;
-      border-color: #0078d7;
-      box-shadow: 0 0 5px rgba(0, 120, 215, 0.5);
-    }
-
-    .options {
+    .controls {
+      margin-top: 15px;
       display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 20px;
+      flex-direction: row;
+      gap: 10px;
+      align-items: center;
     }
-
-    label {
-      font-size: 16px;
-      color: #333;
-    }
-
-    button {
-      padding: 12px 24px;
-      background-color: #0078d7;
+    select, a {
+      padding: 8px 12px;
+      background-color: #1e1e1e;
       color: white;
-      border: none;
+      border: 1px solid #333;
       border-radius: 8px;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background-color 0.3s ease;
+      text-decoration: none;
+      transition: background 0.3s;
     }
-
-    button:hover {
-      background-color: #005fa3;
+    select:hover, a:hover {
+      background-color: #2e2e2e;
     }
-
-    .credit {
+    footer {
       margin-top: 30px;
       font-size: 14px;
-      color: #444;
-    }
-
-    .credit a {
-      color: #0078d7;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    .credit a:hover {
-      text-decoration: underline;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>BTEUP Card Generator</h1>
-    <input type="text" id="enrollInput" placeholder="Enter your Enrollment Number">
-    
-    <div class="options">
-      <label><input type="radio" name="cardType" value="admit" checked> Admit Card</label>
-      <label><input type="radio" name="cardType" value="verify"> Verification Card</label>
-    </div>
+  <h1>🎥 TEN3HD Live Stream</h1>
+  <video id="video" controls autoplay></video>
 
-    <button onclick="redirectToCard()">Submit</button>
-
-    <p class="credit">Website made by <strong>cyb3e 3xp3rt</strong> | Contact: <a href="https://t.me/slayer9646" target="_blank">@slayer9646</a></p>
+  <div class="controls">
+    <label for="quality">Quality:</label>
+    <select id="quality"></select>
+    <a href="https://t.me/fastxLoot" target="_blank">Join Telegram 💬</a>
   </div>
 
+  <footer>
+    Stream from <code>tataplay.slivcdn.com</code>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
-    function redirectToCard() {
-      const enrollNumber = document.getElementById("enrollInput").value.trim();
-      const cardType = document.querySelector('input[name="cardType"]:checked').value;
+    const video = document.getElementById('video');
+    const qualitySelect = document.getElementById('quality');
+    const streamUrl = "https://tataplay.slivcdn.com/hls/live/2020591/TEN3HD/master_3500.m3u8";
 
-      if (!enrollNumber) {
-        alert("Please enter a valid enrollment number.");
-        return;
-      }
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
 
-      let baseUrl = "";
-      if (cardType === "admit") {
-        baseUrl = "https://bteup.ac.in/ESeva/Student/AdmitCard.aspx?EnrollNumber=";
-      } else if (cardType === "verify") {
-        baseUrl = "https://bteup.ac.in/ESeva/Student/VerificationCard.aspx?EnrollNumber=";
-      }
+      hls.on(Hls.Events.MANIFEST_PARSED, function () {
+        const levels = hls.levels;
+        qualitySelect.innerHTML = '';
+        qualitySelect.innerHTML += `<option value="-1">Auto</option>`;
+        levels.forEach((level, index) => {
+          const resolution = `${level.height}p`;
+          qualitySelect.innerHTML += `<option value="${index}">${resolution}</option>`;
+        });
 
-      const fullUrl = baseUrl + encodeURIComponent(enrollNumber);
-      window.location.href = fullUrl; // Redirects in same tab (no link shown)
+        qualitySelect.addEventListener('change', function () {
+          const level = parseInt(this.value);
+          hls.currentLevel = level;
+        });
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = streamUrl;
+    } else {
+      alert('Your browser does not support HLS playback.');
     }
   </script>
 </body>
